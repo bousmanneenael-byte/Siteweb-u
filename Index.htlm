@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lord.com</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 0;
+  }
+  #game {
+    width: 320px;
+    height: 570px;
+    margin: 20px auto;
+    border: 2px solid #333;
+    position: relative;
+    background-color: #fff;
+  }
+  #character {
+    width: 50px;
+    height: 50px;
+    background-color: #f44336;
+    position: absolute;
+    bottom: 50px;
+    left: 135px;
+    cursor: pointer;
+  }
+  #moneyDisplay {
+    font-size: 20px;
+    margin: 10px;
+  }
+  #shop, #exitShop {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #ffeb3b;
+    border: none;
+    cursor: pointer;
+  }
+  #shopItems {
+    display: none;
+    margin-top: 10px;
+  }
+  .item {
+    margin: 5px;
+    padding: 5px;
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1>Lord.com</h1>
+<div id="moneyDisplay">Argent: 0 €</div>
+<button id="shopButton">Entrée Boutique</button>
+<button id="exitShop">Sortie Boutique</button>
+
+<div id="game">
+  <div id="character" title="Clique pour obtenir de l'argent!"></div>
+  <div id="shopItems">
+    <div class="item" data-price="50">Amélioration +1 € par clic (50€)</div>
+    <div class="item" data-price="100">Amélioration +5 € par clic (100€)</div>
+  </div>
+</div>
+
+<script>
+let money = 0;
+let moneyPerClick = 1;
+
+const moneyDisplay = document.getElementById('moneyDisplay');
+const character = document.getElementById('character');
+const shopButton = document.getElementById('shopButton');
+const exitShop = document.getElementById('exitShop');
+const shopItems = document.getElementById('shopItems');
+
+// Fonction pour mettre à jour l'argent
+function updateMoney() {
+  moneyDisplay.textContent = "Argent: " + money + " €";
+}
+
+// Cliquer sur le personnage pour obtenir de l'argent
+character.addEventListener('click', () => {
+  money += moneyPerClick;
+  updateMoney();
+});
+
+// Ouvrir la boutique
+shopButton.addEventListener('click', () => {
+  shopItems.style.display = 'block';
+  exitShop.style.display = 'inline-block';
+  shopButton.style.display = 'none';
+});
+
+// Sortir de la boutique
+exitShop.addEventListener('click', () => {
+  shopItems.style.display = 'none';
+  exitShop.style.display = 'none';
+  shopButton.style.display = 'inline-block';
+});
+
+// Acheter des améliorations
+document.querySelectorAll('.item').forEach(item => {
+  item.addEventListener('click', () => {
+    const price = parseInt(item.getAttribute('data-price'));
+    if (money >= price) {
+      money -= price;
+      if (price === 50) moneyPerClick += 1;
+      if (price === 100) moneyPerClick += 5;
+      updateMoney();
+      alert("Achat réussi !");
+    } else {
+      alert("Pas assez d'argent !");
+    }
+  });
+});
+</script>
+
+</body>
+</html>
